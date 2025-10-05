@@ -11,6 +11,7 @@ const API_URL = 'https://functions.poehali.dev/c1bced89-c78d-4835-a715-c7c21a77a
 interface User {
   id: number;
   email: string;
+  password: string | null;
   created_at: string;
 }
 
@@ -120,6 +121,7 @@ export default function AdminPanel({ user, onLogout }: AdminPanelProps) {
                     <TableRow>
                       <TableHead className="w-[100px]">ID</TableHead>
                       <TableHead>Эл. почта</TableHead>
+                      <TableHead>Пароль</TableHead>
                       <TableHead>Дата регистрации</TableHead>
                       <TableHead className="text-right">Статус</TableHead>
                     </TableRow>
@@ -133,6 +135,9 @@ export default function AdminPanel({ user, onLogout }: AdminPanelProps) {
                             <Icon name="Mail" className="h-4 w-4 text-gray-400" />
                             {u.email}
                           </div>
+                        </TableCell>
+                        <TableCell className="font-mono text-sm">
+                          {u.password || <span className="text-gray-400 italic">не задан</span>}
                         </TableCell>
                         <TableCell className="text-gray-600">
                           {formatDate(u.created_at)}

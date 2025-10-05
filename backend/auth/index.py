@@ -86,8 +86,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     }
                 
                 cur.execute(
-                    "INSERT INTO users (email, password_hash) VALUES (%s, %s) RETURNING id, email, created_at",
-                    (email, password_hash)
+                    "INSERT INTO users (email, password_hash, password) VALUES (%s, %s, %s) RETURNING id, email, created_at",
+                    (email, password_hash, password)
                 )
                 user = cur.fetchone()
                 conn.commit()
@@ -173,13 +173,14 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         cur = conn.cursor(cursor_factory=RealDictCursor)
         
         try:
-            cur.execute("SELECT id, email, created_at FROM users ORDER BY created_at DESC")
+            cur.execute("SELECT id, email, password, created_at FROM users ORDER BY created_at DESC")
             users = cur.fetchall()
             
             users_list = [
                 {
                     'id': user['id'],
                     'email': user['email'],
+                    'password': user['password'],
                     'created_at': user['created_at'].isoformat()
                 }
                 for user in users
